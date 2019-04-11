@@ -1,0 +1,23 @@
+{
+  "name": "fancyForm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sass": "node-sass -w scss/ -o css/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schwarro/fancyForm.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/schwarro/fancyForm/issues"
+  },
+  "homepage": "https://github.com/schwarro/fancyForm#readme",
+  "dependencies": {
+    "node-sass": "^4.11.0"
+  }
+}
