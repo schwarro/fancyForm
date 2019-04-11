@@ -28,6 +28,9 @@ const progress = document.querySelector('#progress-bar');
 //Get Question on Dom Load
 document.addEventListener('DOMContentLoaded', getQuestion);
 
+// Next Button CLick
+nextBtn.addEventListener('click' validate);
+
 
 //Functions
 
@@ -66,3 +69,21 @@ function hideQuestion() {
   inputProgress.style.transition = 'none';
   inputGroup.style.border = null;
 }
+
+//Validate Field
+function validate(){
+  //Make Sure Pattern Matches if there is one
+  if(!inputField.value.match(questions[position].pattern || /.+/)){
+    inputFail();
+  } else {
+    inputPass();
+  }
+}
+
+//Field Input Fail
+function inputFail() {
+
+}
+
+//Field INput Passed
+function
