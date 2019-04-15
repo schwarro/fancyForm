@@ -25,25 +25,31 @@ const progress = document.querySelector('#progress-bar');
 
 // EVENTS
 
-//Get Question on Dom Load
+// Get Question On DOM Load
 document.addEventListener('DOMContentLoaded', getQuestion);
 
-// Next Button CLick
-nextBtn.addEventListener('click' validate);
+// Next Button Click
+nextBtn.addEventListener('click', validate);
 
+//Input Field Enter Click
+inputField.addEventListener('keyup', e => {
+  if(e.keyCode == 13) {
+    validate();
+  }
+});
 
 //Functions
 
-//Get Question from array and add to markup
+// Get Question From Array & Add To Markup
 function getQuestion() {
-  //get current question
+  // Get Current Question
   inputLabel.innerHTML = questions[position].question;
-  //Get Current type
+  // Get Current Type
   inputField.type = questions[position].type || 'text';
-  //get current answer
+  // Get Current Answer
   inputField.value = questions[position].answer || '';
-  //focus on element
-  inputField.focus()
+  // Focus On Element
+  inputField.focus();
 
   // Set Progress Bar Width - Variable to the questions length
   progress.style.width = (position * 100) / questions.length + '%';
@@ -54,14 +60,14 @@ function getQuestion() {
   showQuestion();
 }
 
-//Display Question to User
+// Display Question To User
 function showQuestion() {
   inputGroup.style.opacity = 1;
   inputProgress.style.transition = '';
   inputProgress.style.width = '100%';
 }
 
-//Hide Question From user
+// Hide Question From User
 function hideQuestion() {
   inputGroup.style.opacity = 0;
   inputLabel.style.marginLeft = 0;
@@ -70,20 +76,72 @@ function hideQuestion() {
   inputGroup.style.border = null;
 }
 
-//Validate Field
-function validate(){
-  //Make Sure Pattern Matches if there is one
-  if(!inputField.value.match(questions[position].pattern || /.+/)){
+// Transform To Create Shake Motion
+function transform(x, y) {
+  formBox.style.transform = `translate(${x}px, ${y}px)`;
+}
+
+// Validate Field
+function validate() {
+  // Make Sure Pattern Matches If There Is One
+  if (!inputField.value.match(questions[position].pattern || /.+/)) {
     inputFail();
   } else {
     inputPass();
   }
 }
 
-//Field Input Fail
+// Field Input Fail
 function inputFail() {
-
+  formBox.className = 'error';
+  // Repeat Shake Motion -  Set i to number of shakes
+  for (let i = 0; i < 6; i++) {
+    setTimeout(transform, shakeTime * i, ((i % 2) * 2 - 1) * 20, 0);
+    setTimeout(transform, shakeTime * 6, 0, 0);
+    inputField.focus();
+  }
 }
 
-//Field INput Passed
-function
+//Field Input Passed
+function inputPass() {
+  formBox.className = '';
+  setTimeout(transform, shakeTime * 0, 0, 10);
+  setTimeout(transform, shakeTime * 1, 0, 0);
+
+  //store Answer in Array
+  questions[position].answer = inputField.value;
+
+  //Increment Position
+  position ++;
+
+  //if New Question, Hide Current and Get Next
+  if(questions[position]) {
+    hideQuestion();
+    getQuestion();
+  } else {
+    //Remove if no more options
+    hideQuestion();
+    formBox.className = 'close';
+    progress.style.width = '100%';
+
+    //Form Complete
+    formComplete();
+  }
+}
+
+//All Fields formComplete
+function formComplete() {
+  const h1 = document.createElement('h1');
+  h1.classList.add('end');
+  h1.appendChild(
+      document.createTextNode(
+        `Thanks ${
+          questions[0].answer
+        } you are registered and will get an email shortly`
+      )
+    );
+  setTimeout(() => {
+    formBox.parentElement.appendChild(h1);
+    setTimeout(() => (h1.style.opacity = 1), 50);
+  }, 1000);
+}
